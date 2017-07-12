@@ -1,0 +1,56 @@
+body{
+    margin-left: 0px;
+    margin-right: 0px;
+    background:#ffffff;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+.myPannel{
+    margin-top: 0px;
+    font-family: Arial;
+    border: 0px solid #000000;
+    border-radius: 5px;
+    padding-left: 0px;
+    padding-right:0px;
+    margin-left: 0px;
+    margin-right: 0px;
+
+}
+.center {
+    width: auto;
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+}
+.text-center {
+    text-align: center;
+}
+
+.vertical-center{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+#player{
+    border: 1px solid #ccc;
+    width: 320px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-size: 14px;
+    margin:0 auto;
+}
+
+.yuanjiao{
+    font-family: Arial;
+    border: 2px solid #379082;
+    border-radius: 10px;
+
+
+    background:#ffffff;
+
+}
+.g-container-video {
+    width: 320px;
+    margin: 0 auto;
+}

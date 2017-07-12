@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" href="style.css" type="text/css" />
+  <script src="js/lib/jquery-1.8.0.min.js"></script>
+  <script src="js/pop.js"></script>
+</head>
+<body>
+<div id="app">
+    <div id="loginView">
+        <div id="loginTitle">
+            用户登陆
+        </div>
+        <table>
+            <tr>
+                <td>
+                    <input id="loginUser" type="text" placeholder="用户名"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input name="channels" type="text" id="channelList" placeholder="密码"
+                    />
+                </td>
+            <tr>
+                <td>
+                    <input id="login" type='button' value="登陆" />
+                    <input id="register" type='button' value="去注册" />
+                </td>
+            </tr>
+        </table>
+        <div id="loginError">
+        </div>
+    </div>
+
+<script>
+    var loading = false;
+    var username = 'hawk';
+    var roomID = 'room1';
+    var httpHost = location.href.replace(location.hash, '');
+
+    window.onload = function() {
+
+         $('#register').on('click', function(){
+             window.location.href='/registry.html';
+         });
+
+         $('#login').on('click', function(){
+             console.log('pressed');
+             if (loading) {
+                 return;
+             }
+             loading = true;
+             var username = $('#loginUser').val().trim();
+             var pwd = $('#channelList').val().trim();
+             //$('#passWord').val('');
+             if (!username) {
+                 alert("Username is required!");
+                 loading = false;
+                 return;
+             }
+
+             if (!pwd) {
+                 alert("Password is required!");
+                 loading = false;
+                 return;
+             }
+
+             $.post(httpHost +'/../login', {username: username, password: pwd}, function(data) {
+                 if (data.code === 501) {
+                     alert('Username or password is invalid!');
+                     loading = false;
+                     //window.location.href='/registry.html';
+                     console.log('tesrt');
+                     //var pop=new Pop('Test', 'the password is not valid');
+
+                     return;
+                 }
+                 if (data.code !== 200) {
+                     alert('Username is not exists!');
+                     loading = false;
+                    // window.location.href='/registry.html';
+                     //var pop=new Pop('Test', 'the password is not valid');
+
+                     return;
+                 }
+
+                 window.localStorage.setItem('userName', data.userName);
+                 window.localStorage.setItem('token',data.token);
+                 window.localStorage.setItem('userType',data.userType);
+                 //window.localStorage.setItem('roomID', data.roomID);
+                 //window.localStorage.setItem('gameFile',data.gameFile);
+                 //console.log('GameFile=' + data.gameFile);
+                 //window.location.href='/'+data.gameFile;
+                 window.location.href='/SelectRoom.html';
+
+             });
+         });
+         }
+
+</script>
+</body>
+</html>

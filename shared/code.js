@@ -1,0 +1,145 @@
+module.exports = {
+	OK: 200, 
+	FAIL: 500, 
+
+	ENTRY: {
+		FA_TOKEN_INVALID: 	1001, 
+		FA_TOKEN_EXPIRE: 	1002, 
+		FA_USER_NOT_EXIST: 	1003
+	}, 
+
+	GATE: {
+		FA_NO_SERVER_AVAILABLE: 2001
+	}, 
+
+	CHAT: {
+		FA_CHANNEL_CREATE: 		3001, 
+		FA_CHANNEL_NOT_EXIST: 	3002, 
+		FA_UNKNOWN_CONNECTOR: 	3003, 
+		FA_USER_NOT_ONLINE: 	3004 
+	},
+	STATE: {
+		INIT: 					0,
+		WAIT: 					80,
+		STARTBETTING: 			10,
+		BETTING: 				20,
+		STOPBETTING:			30,
+		ANOUNCERESULT: 			40,
+		CELEBRATE:				50,
+		CLEAR: 					60,
+		GENERATESCENE:			70,
+		CHECKSCENE:				80
+	},
+	COMMAND:{
+		HELLO:			88,
+		OPERATE: 		0,
+		LOGIN:			1,
+		LOGOUT:			2,
+		CHANGESTATE: 	3,
+		SHOWTIME: 		4,
+		SHOWBETTING:	5,
+		SHOWALLBETTING: 6,
+		SHOWUSERS:		7,
+		USERLOGIN:		8,
+		USERLOGOUT:	    9,
+		SHOWSCENE:		10,
+		SHOWRESULT:		11,
+		UPSCORE:		12,
+		DOWNSCORE:		13,
+		LIVESTREAM:		14,
+		CHAT:			15,
+		CHECKPRINTER:	16,
+		PRINTSCENE:		17,
+		UNLOCK:			18,
+		SHOWROOMS:		19,
+		SHOWROOMINFO:	20,
+		ROOMNOTIFY:		21,
+		SCENENOTIFY:	22,
+		SHOWSCENES:		23,
+		HALLNOTIFY: 	24,
+		ACCOUNTNOTIFY: 	25,
+		BCREQUESTFROMUSER: 26,
+		BCREQUESTFROMROOM: 27,
+		BCREQUESTFROMHALL: 28,
+		USERREQESTDOWNSCORE:29,
+		UPDATEROOMCONFIG:	30,
+		SHOWMESSAGE:		31,
+		FINISHPRINTING:      32
+
+	},
+
+	DATAINDEX:{
+		BALANCE:		0,
+		SWITCHUNIT:		1,
+		USERID:			2,
+		BONUS:			3,
+		STATE:			4,
+		USERTYPE:		5,
+		BETSTART:		6
+	},
+
+    ACCOUNTOPERATION:{
+		UPSCORE:		0,
+		DOWNSCORE:		1,
+		BET:			2,
+		WIN:			3
+	},
+
+	USERTYPE:{
+		DISABLED:      0,
+		USER:         10,
+		BOSS:         1,
+		ACCOUNTANT:   2,
+		ANCHOR:       3,
+		PRINTER:	  4,
+		CHATROOMPRINTER: 5,
+
+		LEVEL1:       77,
+		SUPERVISER:   88
+
+	},
+
+    ROOMTYPE:{
+        EMPTY:      0,
+        HALL:       1,
+        CHATROOM:   2,
+        GAMEROOM:   3,
+		FULL:		4
+    },
+
+	OPERATIONTYPE:{
+		UPSCORE:		0,
+		DOWNSCORE:		1,
+		BET:			2,
+		WIN:			3,
+		UPSCORETO:      4,
+		DOWNSCORETO:	5,
+		BALANCE:        6
+	},
+	RETURNCODE:{
+		OK:             200,
+		ERROR:			100,
+		DUPLICATEUSER:	101,
+		EXPIRED:        300,
+		NORIGHT:        400,
+		DBERROR:        500,
+		NAMEEXIST:      501,
+		WRONGINTRODUCER:   502,
+		NONAME:             503,
+		WRONGPASS:          504,
+		ROOMIDNULL:         505
+
+	},
+	CODESTRING:{
+		OK:         '操作成功',
+		EXPIRED:    '登陆过期',
+		NORIGHT:    '越权操作',
+		DBERROR:    '数据库出错',
+		NAMEEXIST:  '用户名已存在',
+		WRONGINTRODUCER:  '介绍人不存在',
+		NONAME:             '用户名不存在',
+		WRONGPASS:          '密码错误',
+		ROOMIDNULL:      '介绍人暂未分配大厅'
+	}
+
+};

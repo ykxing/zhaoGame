@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport"content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>Hawk Game</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/mainCSS.css">
+
+
+</head>
+<body >
+<div class="panel-group vertical-center" id="accordion ">
+<div class="panel myPannel" id="loginView" style ="display:none;" border="1px solid #000000">
+    <div class="panel-heading">
+        <h2 class="panel-title center">
+            <a href="#">
+                用户登录
+            </a>
+        </h2>
+    </div>
+
+        <div class="panel-body">
+
+            <table class=" table " >
+                <tr>
+                    <td class="center">
+                        <input id="loginUser" type="text" placeholder="用户名"/>
+                    </td>
+
+                    <td class="center">
+                        <input name="channels" type="password" id="channelList" placeholder="密码"/>
+                    <td class="center">
+                        <button type="button" class="btn  btn-large center" id="login">进入游戏大厅</button>
+                     </td>
+                </tr>
+                <tr>
+                    <td class="center">
+                        <button type="button" class="btn  btn-default" id="register">新用户注册</button>
+                        <button type="button" class="btn  btn-default" id="pass">忘记密码</button>
+                        <button type="button" class="btn  btn-default" id="disclaim">免责申明</button>
+                    </td>
+                </tr>
+            </table>
+            <div id="loginError"></div>
+        </div>
+
+</div>
+
+</div>
+
+
+<script src="js/lib/jquery-1.8.0.min.js"></script>
+<script src="/js/base.js"></script>
+<script src="js/lib/bootstrap.min.js"></script>
+<script src="js/lib/bootstrap-table.min.js"></script>
+<script src="js/lib/layer/layer.js"></script>
+<script>
+    window.onload = function() {
+        var httpHost = location.href.replace(location.hash, '');
+
+        var userName = storage("userName");
+        var token = storage('token');
+        if(userName == null || token == null){
+            $('#loginView').show();
+            $('#loginUser').val(userName);
+        }
+        else {
+            $.post(httpHost + '/../getUserInfo', {'username': userName, 'token': token}, function (data) {
+                if (data.code != code.RETURNCODE.OK) {
+                    $('#loginView').show();
+                    $('#loginUser').val(userName);
+                } else {
+                    storage('userName', data.userName);
+                    storage('userType', data.userType);
+                    storage('balance', data.balance);
+                    storage('parent', data.parent);
+                    storage('roomID', data.roomID);
+                    storage('homeRoomID', data.roomID);
+                    dispatch();
+                }
+            });
+        }
+
+
+
+
+        $('#register').on('click', function(){
+             window.location.href='/registry.html';
+         });
+
+        $('#disclaim').on('click', function(){
+        layer.msg('<h3>免责声明</h3>欢迎使用本游戏平台。为确保您正常游戏，避免意外风险，清晰责任权益，特指定本声明,在您进行游戏之前，请仔细阅读并确认以下条款.<br> 1 本游戏平台是为了倡导广大网名参与积极，健康的休闲娱乐方式。严禁用户利用比赛的进程，结果进行任何形式的赌博行为。如有发现，将立即冻结相关人员账号，并在必要时坚决配合执法部门进行查处。对于游戏者个人因违反本条造成的财产损失，本游戏概不承担任何责任。<br>2 本游戏平台只针对年满18周岁且具有完全民事行为能力人，严禁未成年人参加。一经发现用户发生此行为，本游戏平台有权对其进行惩罚。<br>3 本游戏平台给予用户游戏交流空间，用户对自己以游戏账号在游戏被发生的所有言行负责，任何违反本免责条款，国家相关法律的行为或发生其他不正当行为都是严格禁止的。本游戏平台对此类行为不承担任何责任，并保有提交用户不正当行为证据给相应国家管理部门处理的权利。<br>4 用户无权使用任何可能影响到游戏程序运行稳定或游戏发展的其他外部软件或手段进行游戏。用户不得进行任何使用服务器载过量或造成技术超载的行为.<br>5 本游戏因其他合作方或相关通讯部门的互联网软硬件设备故障或失灵，或人为操作疏忽而全部或部分中断、延迟、遗漏、导致或造成资料传输和存储上的错误；或遭第三方侵入系统篡改、伪造、编造资料等，本游戏平台不承担任何责任。', {
+            time: 20000, //20s后自动关闭
+            btn: ['明白了']
+        });
+        });
+         $('#login').on('click', function(){
+             var username = $('#loginUser').val().trim();
+             var pwd = $('#channelList').val().trim();
+
+             if (username == "")  {
+                 layer.msg("请输入用户名",{icon:5});
+                 return;
+             }
+             if (pwd == "")  {
+                 layer.msg("请输入密码",{icon:5});
+                 return;
+             }
+             $.post(httpHost +'/../login', {username: username, password: pwd}, function(data) {
+                 if (data.code != code.RETURNCODE.OK) {
+                     //alert('Username or password is invalid!');
+                     layer.alert(data.message,{icon:5});
+                     //window.location.href='/registry.html';
+                     return;
+                 }
+                 storage('userName',data.userName);
+                 storage('token',data.token);
+                 storage('userType',data.userType);
+                 storage('balance',data.balance);
+                 storage('parent',data.parent);
+                 storage('roomID',data.roomID);
+                 storage('homeRoomID',data.roomID);
+                 dispatch();
+
+             });
+         });
+         }
+    function dispatch(){
+        switch(storage('userType'))
+        {
+            case code.USERTYPE.SUPERVISER:
+                window.location.href='/Supervisor.html';
+                break;
+            case code.USERTYPE.ACCOUNTANT:
+            case code.USERTYPE.BOSS:
+            case code.USERTYPE.ANCHOR:
+            case code.USERTYPE.LEVEL1:
+                window.location.href='/HallRoomMan.html';
+                //window.location.href='/HallRoomMan.html';
+                break;
+            case code.USERTYPE.USER:
+                window.location.href='/HallRoomUser.html';
+                //window.location.href='/clientFrame.html';
+                break;
+            case code.USERTYPE.CHATROOMPRINTER:
+                window.location.href='/HallRoomChatRoomPrinter.html';
+                break;
+
+        }
+    }
+</script>
+</body>
+</html>

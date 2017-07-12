@@ -1,0 +1,12 @@
+{
+  "name": "chatofpomelo",
+  "version": "0.0.1",
+  "private": false,
+  "dependencies": {
+    "async": "^2.5.0",
+    "connect": ">=0.0.1",
+    "express": "2.5.2",
+    "generic-pool": "1.0.9",
+    "mysql": ">=2.0"
+  }
+}

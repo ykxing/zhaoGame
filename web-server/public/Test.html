@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    <script src="js/lib/jquery-1.8.0.min.js"></script>
+    <script src="/js/base.js"></script>
+    <script src="js/lib/bootstrap.min.js"></script>
+
+    <script src="js/pop.js"></script>
+</head>
+<body>
+<div id="app">
+    <div id="loginView">
+        <div id="loginTitle">
+            Test Paper
+        </div>
+        <table>
+                <td>
+                    <input id="TestB1" type='button' value="Add 100 Rooms" />
+                    <input id="TestB2" type='button' value="Create Hall" />
+                    <input id="TestB3" type='button' value="Create Room" />
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</div>
+    <script>
+        var httpHost = location.href.replace(location.hash, '');
+        window.onload = function(){
+            $('#TestB1').on('click', function() {
+                console.log('TestB1 pressed');
+                $.post(httpHost + '/../InitRooms', {}, function (data) {
+                    console.log(data.message);
+                });
+            });
+
+            $('#TestB2').on('click', function() {
+                console.log('TestB2 pressed');
+                $.post(httpHost + '/../CreateHall', {hallName:'hall2', createHallDesc:'boss2 hall', hallBoss:'boss2'}, function (data) {
+                    console.log(data.message);
+                });
+            });
+
+            $('#TestB3').on('click', function() {
+                console.log('TestB3 pressed');
+                $.post(httpHost + '/../CreateRoom', {'hallName':'room2-2', 'createHallDesc':' room 2 in hall2','parent':5, 'roomType':code.ROOMTYPE.CHATROOM}, function (data) {
+                    console.log(data.message);
+                });
+            });
+
+        }
+    </script>
+</body>
+</html>

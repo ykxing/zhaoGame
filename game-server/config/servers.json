@@ -1,0 +1,49 @@
+{
+    "development":{
+      "sioconnector":[
+        {"id":"sioconnector-server-1", "host":"127.0.0.1", "port":8050, "clientPort": 7050, "frontend": true},
+        {"id":"sioconnector-server-2", "host":"127.0.0.1", "port":8051, "clientPort": 7051, "frontend": true},
+        {"id":"sioconnector-server-3", "host":"127.0.0.1", "port":8052, "clientPort": 7052, "frontend": true}
+      ],
+      "siogate":[
+        {"id": "siogate-server-1", "host": "127.0.0.1", "clientPort": 3017, "frontend": true}
+      ],
+        "connector":[
+             {"id":"connector-server-1", "host":"127.0.0.1", "port":4050, "clientPort": 3050, "frontend": true},
+             {"id":"connector-server-2", "host":"127.0.0.1", "port":4051, "clientPort": 3051, "frontend": true},
+             {"id":"connector-server-3", "host":"127.0.0.1", "port":4052, "clientPort": 3052, "frontend": true}
+         ],
+        "chat":[
+             {"id":"chatServer-0", "host":"127.0.0.1", "port":6050},
+             {"id":"chatServer-1", "host":"127.0.0.1", "port":6051},
+             {"id":"chatServer-2", "host":"127.0.0.1", "port":6052}
+
+        ],
+        "gate":[
+           {"id": "gate-server-1", "host": "127.0.0.1", "clientPort": 3014, "frontend": true}
+        ]
+    },
+    "production":{
+      "sioconnector":[
+        {"id":"sioconnector-server-1", "host":"127.0.0.1", "port":8050, "clientPort": 7050, "frontend": true},
+        {"id":"sioconnector-server-2", "host":"127.0.0.1", "port":8051, "clientPort": 7051, "frontend": true},
+        {"id":"sioconnector-server-3", "host":"127.0.0.1", "port":8052, "clientPort": 7052, "frontend": true}
+      ],
+      "siogate":[
+        {"id": "siogate-server-1", "host": "127.0.0.1", "clientPort": 3017, "frontend": true}
+      ],
+           "connector":[
+             {"id":"connector-server-1", "host":"127.0.0.1", "port":4050, "clientPort": 3050, "frontend": true},
+             {"id":"connector-server-2", "host":"127.0.0.1", "port":4051, "clientPort": 3051, "frontend": true},
+             {"id":"connector-server-3", "host":"127.0.0.1", "port":4052, "clientPort": 3052, "frontend": true}
+         ],
+        "chat":[
+             {"id":"chatServer-0", "host":"127.0.0.1", "port":6050},
+             {"id":"chatServer-1", "host":"127.0.0.1", "port":6051},
+             {"id":"chatServer-2", "host":"127.0.0.1", "port":6052}
+        ],
+        "gate":[
+           {"id": "gate-server-1", "host": "127.0.0.1", "clientPort": 3014, "frontend": true}
+        ]
+  }
+}

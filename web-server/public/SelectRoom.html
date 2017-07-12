@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport"content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>Hawk Game</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <style>
+        body{
+            margin-left: 10px;
+            margin-right: 10px;
+            margin-top: 50px;
+            background:#ffffff;
+        }
+        .myPannel{
+            margin-top: 10px;
+            background: #00A000;
+            font-family: Arial;
+            border: 1px solid #000000;
+            border-radius: 10px;
+            padding-left: 5px;
+            padding-right:5px;
+
+        }
+        #player{
+            border: 1px solid #ccc;
+            width: 320px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            font-size: 14px;
+            margin:0 auto;
+        }
+
+        .yuanjiao{
+            font-family: Arial;
+            border: 2px solid #379082;
+            border-radius: 20px;
+            padding: 0px 0px;
+
+            background:#ffffff;
+
+        }
+        .g-container-video {
+            width: 320px;
+            margin: 0 auto;
+        }
+
+    </style>
+</head>
+
+<div class="container-fluid ">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+
+                <a class="brand" href="#" >
+                    <img src="/assets/phaser.png" width="30" height="20" alt="logo" />HawkGame</a>
+                <div class="nav-collapse">
+                    <ul class="nav">
+                        <li class="active">
+                            <a href="#about" id="userName">waiting...</a></li>
+                    </ul>
+                    <p class="navbar-text pull-right" id="exitBtn" >退出
+                    </p>
+                </div>
+                <!--/.nav-collapse --></div>
+        </div>
+    </div>
+
+
+    <div class='row-fluid'>
+        <div class="span12 myPannel" id="userInfo" >
+            <h5>房间Rooms</h5>
+
+            <select name="users" id="usersList" size = 8 style="width: 100%">
+                <option value="*">
+                    all
+                </option>
+            </select>
+            <br>
+
+            <button type="button" class="btn btn-success btn-small" id="chat">进入房间</button>
+        </div>
+    </div>
+
+
+    <footer class = 'myPannel'>
+        <p>&copy; Company 2016</p>
+    </footer>
+</div>
+
+
+<script src="js/lib/jquery-1.8.0.min.js"></script>
+<script src="/js/lib/NoSleep.min.js"></script>
+<script src="/js/base.js"></script>
+<script src="js/lib/bootstrap.min.js"></script>
+<script>
+    var username;
+    var token;
+    var userType;
+    var httpHost = location.href.replace(location.hash, '');
+
+    window.onload = function() {
+        var localStorage = window.localStorage;
+        if (localStorage['userName'] == null) {
+            console.log('no user name');
+            window.location.href = '/login.html'
+        }
+        else {
+            username = localStorage['userName'];
+            console.log("userName = " + username);
+        }
+        if (localStorage['token'] == null) {
+            console.log('no token');
+            window.location.href = '/login.html'
+        }
+        else {
+            token = localStorage['token'];
+            console.log("token = " + token);
+        }
+        if (localStorage['userType'] == null) {
+            console.log('no user type');
+            window.location.href = '/login.html'
+        }
+        else {
+            userType = localStorage['userType'];
+            console.log("userType = " + userType);
+        }
+
+
+        console.log('getUserInfo');
+        $.post(httpHost + '/../getUserInfo', {'username': username, 'token': token,}, function(data) {
+            if (data.code != code.RETURNCODE.OK){
+                console.log(data.message);
+               // window.location.href = '/login.html';
+            } else{
+                console.log("get userInfo now");
+                $('#userName').text(username+ "余分:"+data.balance.toString());
+            }
+        });
+
+        console.log('getRooms');
+        $.post(httpHost + '/../getRooms', {'username': username, 'token': token,'roomID':1}, function(data) {
+            if (data.code !=code.RETURNCODE.OK){
+                console.log(data.message);
+                window.location.href = '/login.html';
+            } else{
+                console.log("get rooms now");
+                removeUsers();
+                console.log(data.rooms);
+                
+                for(var room in data.rooms) {
+                    console.log(data.rooms[room])
+                    addUser(data.rooms[room].roomID + ':'+data.rooms[room].roomName+'(现在有'+ data.rooms[room].numOfUsers+'人)' );
+
+                }
+            }
+        });
+
+    }
+
+
+
+
+    $("#exitBtn").click(function(e){
+
+        window.localStorage.removeItem('userName');
+        window.localStorage.removeItem('token');
+        window.localStorage.removeItem('userType');
+        window.localStorage.removeItem('roomID');
+        window.location.href='/';
+    });
+
+    $("#chat").click(function(e){
+
+        var roomID = $("#usersList").find("option:selected").text();
+        var rid = parseInt(roomID.split(':')[0]);
+        window.localStorage.setItem('roomID',rid);
+        console.log('roomID='+rid);
+        if(rid>=0)
+        {
+            if(username=='hawk'){
+                //window.location.href='/'+'ChatRoomUser.html';
+                window.location.href='/'+'ChatRoomPrinter.html';
+
+            }
+            else{
+                window.location.href='/'+'ChatRoomMan.html';
+            }
+            /*
+            if(userType==0){
+                //window.location.href='/'+'ChatRoomUser.html';
+                window.location.href='/'+'ChatRoomUser.html';
+
+            }
+            else{
+                window.location.href='/'+'ChatRoomMan.html';
+            }
+            */
+
+        }
+
+    })
+
+</script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport"content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>Hawk Game</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <style>
+        body{
+            margin-left: 10px;
+            margin-right: 10px;
+            margin-top: 50px;
+            background:#ffffff;
+        }
+        .myPannel{
+            margin-top: 10px;
+            background: #00A000;
+            font-family: Arial;
+            border: 1px solid #000000;
+            border-radius: 10px;
+            padding-left: 5px;
+            padding-right:5px;
+
+        }
+        #player{
+            border: 1px solid #ccc;
+            width: 320px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            font-size: 14px;
+            margin:0 auto;
+        }
+
+        .yuanjiao{
+            font-family: Arial;
+            border: 2px solid #379082;
+            border-radius: 20px;
+            padding: 0px 0px;
+
+            background:#ffffff;
+
+        }
+        .g-container-video {
+            width: 320px;
+            margin: 0 auto;
+        }
+
+    </style>
+</head>
+
+<div class="container-fluid ">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+
+                <a class="brand" href="#" >
+                    <img src="/assets/phaser.png" width="30" height="20" alt="logo" />HawkGame</a>
+                <div class="nav-collapse">
+                    <ul class="nav">
+                        <li class="active">
+                            <a href="#about" id="userName">waiting...</a></li>
+                    </ul>
+                    <p class="navbar-text pull-right" id="exitBtn" >退出
+                    </p>
+                </div>
+                <!--/.nav-collapse --></div>
+        </div>
+    </div>
+
+    <div class='row-fluid'>
+        <div class="span12 myPannel" id="userInfo" >
+            <h5>房间Rooms</h5>
+
+            <table>
+                <tr>
+                    <td>
+                        <p>
+                            房间名称 <input id="hallName" type="text"  placeholder="房间名称"/> *
+                            <br>
+                            房间描述 <input id="createHallDesc" type="text" placeholder="房间描述"/> *
+                            <br>
+                            房间类型
+                            <select name="users" id="createHallType" style="width: 74%">
+                                <option>chatRoom</option>
+                                <option>gameRoom</option>
+                            </select> *
+                            <br>
+                            <!--
+                            房间主播
+                            <select  id="hallBoss" style="width: 74%;">
+                            </select> *
+                            -->
+                            <!--
+                            <select  id="hallBoss" size=1 name="creater"><option></option></select>
+
+                            <select name="users" id="hallBoss" size = 8 style="width: 100%">
+                                <option value="*">
+                                    all
+                                </option>
+                            </select>
+                            -->
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input id="create" type='button' value="创建" />
+                        <input id="disable" type='button' value="取消" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <footer class = 'myPannel'>
+        <p>&copy; Company 2016</p>
+    </footer>
+</div>
+
+<script src="js/lib/jquery-1.8.0.min.js"></script>
+<script src="/js/lib/NoSleep.min.js"></script>
+<script src="/js/base.js"></script>
+<script src="js/lib/bootstrap.min.js"></script>
+<script>
+    var username;
+    var token;
+    var userType;
+    var httpHost = location.href.replace(location.hash, '');
+
+    window.onload = function() {
+
+        var localStorage = window.localStorage;
+        if (localStorage['userName'] == null) {
+            console.log('no user name');
+            window.location.href = '/login.html'
+        }
+        else {
+            username = localStorage['userName'];
+            console.log("userName = " + username);
+        }
+        if (localStorage['token'] == null) {
+            console.log('no token');
+            window.location.href = '/login.html'
+        }
+        else {
+            token = localStorage['token'];
+            console.log("token = " + token);
+        }
+        if (localStorage['userType'] == null) {
+            console.log('no user type');
+            window.location.href = '/login.html'
+        }
+        else {
+            userType = localStorage['userType'];
+            console.log("userType = " + userType);
+        }
+
+        /*
+         //更新user表的userID
+         console.log('updateUserRoomID');
+         $.post(httpHost + '/../updateUserRoomID', {'username': username, 'token': token,}, function(data) {
+         if (data.code == code.RETURNCODE.DBERROR){
+         console.log(data.message);
+         window.location.href = '/login.html';
+         } else{
+         console.log("updateUserRoomID now");
+         }
+         });
+         */
+
+        //获取当前用户的兄弟节点，设置主播
+//        console.log('getUserSameParent');
+//        $.post(httpHost + '/../getUserSameParent', {'username': username, 'token': token,}, function(data) {
+//            if (data.code == code.RETURNCODE.DBERROR){
+//                console.log(data.message);
+//                window.location.href = '/login.html';
+//            } else{
+//                console.log("get rooms now");
+//                for(var user in data.message) {
+//                    selectBoss(data.message[user].userName);
+//                }
+//            }
+//        });
+
+
+    }
+
+
+    $("#exitBtn").click(function(e){
+
+        window.localStorage.removeItem('userName');
+        window.localStorage.removeItem('token');
+        window.localStorage.removeItem('userType');
+        window.localStorage.removeItem('roomID');
+        window.location.href='/SelectRoom.html';
+    });
+
+    $('#create').on('click', function(){
+        var hallName = $('#hallName').val().trim();
+        var createHallDesc = $('#createHallDesc').val().trim();
+//        var hallBoss = $('#hallBoss').val().trim();
+        var createHallType = $('#createHallType').val().trim();
+        //$('#passWord').val('');
+
+        //将选中的房间类型转为int
+        var createHallTypeToInt;
+        if(createHallType = "chatRoom"){
+            createHallTypeToInt = 2;
+        }
+        else
+            createHallTypeToInt = 3;
+
+        var localStorage = window.localStorage;
+        var userName = localStorage['userName'];
+        console.log(userName);
+
+        console.log('createRoom!');
+//        $.post(httpHost + '/../createRoom', {'hallName': hallName, 'createHallDesc': createHallDesc, 'hallBoss': hallBoss, 'createHallTypeToInt': createHallTypeToInt}, function(data) {
+        $.post(httpHost + '/../createRoom', {'hallName': hallName, 'createHallDesc': createHallDesc, 'createHallTypeToInt': createHallTypeToInt, 'userName': userName}, function(data) {
+            //con
+            if (data.code == code.RETURNCODE.DBERROR){
+                console.log(data.message);
+            }
+            else{
+                console.log("success create room!");
+            }
+        });
+    });
+
+    $("#disable").click(function(e){
+        window.location.href='/SelectRoom.html';
+    });
+
+    //下拉列表
+    function selectBoss(user) {
+        var slElement = $(document.createElement("option"));
+        slElement.attr("value", user);
+        slElement.text(user);
+        $("#hallBoss").append(slElement);
+    }
+
+</script>

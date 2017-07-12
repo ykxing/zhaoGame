@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0 minimal-ui">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="handheldFriendly" content="yes">
+    <title>Client Frame</title>
+    <style>
+        *{margin:0;padding:0}
+        html, body
+        {
+            -webkit-text-size-adjust:none;
+            overflow: hidden;
+            height:100%;
+            margin: 0px 0px 1px 0px;
+            background-color: #000
+        }
+
+    </style>
+
+    <script>
+        (function(doc,win){var docEl=doc.documentElement,resizeEvt='orientationchange'in window?'orientationchange':'resize',recalc=function(){var clientWidth=docEl.clientWidth;if(!clientWidth)return;docEl.style.fontSize=20*(clientWidth/375)+'px'};if(!doc.addEventListener)return;win.addEventListener(resizeEvt,recalc,false);doc.addEventListener('DOMContentLoaded',recalc,false)})(document,window);
+    </script>
+
+
+    <script src="js/lib/jquery-1.8.0.min.js"></script>
+    <script src="js/lib/socket.io.js"></script>
+    <script src="js/lib/pomeloclient.js"></script>
+    <script src="/js/lib/phaser.min.js"></script>
+    <script src="/js/lib/NoSleep.min.js"></script>
+    <script src="/js/base.js"></script>
+    <script src="js/lib/layer/layer.js"></script>
+    <script src="/js/qswhU2GB.js"></script>
+
+    <script src="js/clientFrame.js"></script>
+    <script src="js/hallRoom.js"></script>
+    <script src="js/UI.js"></script>
+
+</head>
+<body>
+<div id="game"></div>
+
+<script>
+    var pomelo = window.pomelo;
+    var game;
+    var httpHost = location.href.replace(location.hash, '');
+    var username = '';
+    var curUserName = '*';
+    var userType = 0;
+    var roomID = 1;
+    var token;
+    var msgQueue = [];
+    var state = code.STATE.INIT;
+    var bIfFirstIn = true;
+    var myTimer = 0;
+    var bIfLoadingFinish = false;
+    var checkList = {connected: false, loaded: false, sayHello: false};
+
+    var noSleepEnabled = false;
+    var noSleep;
+    var switchUnit = 0;
+
+    var sceneBmp;
+    var scenes = {}
+    var rooms = {};
+    var btnGroup;
+
+    var sceneList = [];
+
+    $(document).ready(function() {
+        username = storage("userName");
+        token = storage('token');
+        roomID = storage('roomID');
+        if (username == null || token == null) {
+            window.location.href = '/';
+            return;
+        }
+
+        $.post(httpHost + '/../getUserInfo', {'username': username, 'token': token}, function (data) {
+            if (data.code != code.RETURNCODE.OK) {
+                console.log(data.message);
+                //layer.msg(data.message);
+                window.location.href = '/'
+            } else {
+
+                storage('userName', data.userName);
+                username = data.userName;
+                storage('userType', data.userType);
+                userType = data.userType;
+                storage('balance', data.balance);
+                storage('parent', data.parent);
+                storage('roomID', data.roomID);
+                storage('homeRoomID', data.roomID);
+                console.log('check user infomation ok!!!');
+                //initRoom();
+                //$('#userName').html('<i class="icon-user icon-large"></i>' + userTypeString(data.userType) + ":" + username);
+
+            }
+        });
+
+
+        document.getElementById('game').style.width = document.body.clientWidth + 'px';
+        document.getElementById('game').style.height = document.body.clientHeight + 'px';
+        //var game = new Phaser.Game(750, 1206, Phaser.CANVAS, 'game');
+        game = new Phaser.Game(720, 1280, Phaser.CANVAS, 'game');
+
+        game.state.add('clientFrame.Boot', clientFrame.Boot);
+        game.state.add('clientFrame.Preloader', clientFrame.Preloader);
+
+
+        game.state.add('hallRoom.Preloader', hallRoom.Preloader);
+        game.state.add('hallRoom.Enter', hallRoom.Enter);
+        game.state.add('hallRoom.Game', hallRoom.Game);
+
+
+
+        game.state.start('clientFrame.Boot');
+
+
+        //wait message from the server.
+        pomelo.on('onServer', function (data) {
+            if (data.msg != undefined) {
+                msgQueue.push(data.msg);
+            }
+            else {
+                console.log(data);
+            }
+        });
+        //handle disconect message, occours when the client is disconnect with servers
+        pomelo.on('disconnect', function (reason) {
+            //msgQueue.push(reason);
+            /*
+            if (checkList.connected) {
+                window.location.href = '/';
+                return;
+            }
+            */
+            console.log("disconnect from fontServer");
+        });
+    });
+</script>
+
+</body>
+</html>

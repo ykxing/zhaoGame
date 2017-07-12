@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport"content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>Hawk Game</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="//nos.netease.com/vod163/nep.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <style>
+        body{
+            margin-left: 20px;
+            margin-right: 20px;
+            margin-top: 50px;
+            background:#ffffff;
+        }
+        .myPannel{
+            margin-top: 5px;
+
+            font-family: Arial;
+            border: 1px solid #000000;
+            border-radius: 5px;
+            padding-left: 0px;
+            padding-right:0px;
+            margin-left: 0px;
+            margin-right: 0px;
+
+        }
+        #player{
+            border: 1px solid #ccc;
+            width: 320px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            font-size: 14px;
+            margin:0 auto;
+        }
+
+        .yuanjiao{
+            font-family: Arial;
+            border: 2px solid #379082;
+            border-radius: 20px;
+            padding: 0px 0px;
+
+            background:#ffffff;
+
+        }
+        .g-container-video {
+            width: 320px;
+            margin: 0 auto;
+        }
+
+    </style>
+</head>
+<body>
+<div class="panel-group" id="accordion">
+<div class="panel myPannel " id="loginView" >
+    <div class="panel-heading">
+        <h2 class="panel-title">
+            <a href="#">
+                新用户注册
+            </a>
+        </h2>
+    </div>
+
+    <div class="panel-body">
+
+        <table>
+            <tr>
+                <td>
+                    <input id="loginUser" type="text" placeholder="用户名" />
+                </td>
+            </tr>
+            <tr>
+                <td style = "padding:5px 0;">
+                    <span id = 'inputName' style="display:none; color:#ff0000;">请输入用户名</span>
+                    <span id = 'nameExist' style="display:none; color:#ff0000;">用户名已存在</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input name="channels" type="password" id="channelList" placeholder="密码"/>
+                </td>
+            </tr>
+            <tr>
+                <td style = "padding:5px 0;">
+                    <span id = 'inputPass' style="display:none; color:#ff0000;">请输入密码</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input name="channels" type="text" id="parentUser" placeholder="介绍人"/>
+                </td>
+            </tr>
+            <tr>
+                <td style = "padding:5px 0;">
+                    <span id = 'inputIntro' style="display:none; color:#ff0000;">请输入介绍人</span>
+                    <span id = 'correIntro' style="display:none; color:#ff0000;">请输入正确的介绍人</span>
+                    <span id = 'parentRoomID' style="display:none; color:#ff0000;">您的介绍人暂未分配大厅</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="button" class="btn  btn-default" id="register">注册</button>
+                    <button type="button" class="btn  btn-default" id="login">去登陆</button>
+
+                </td>
+            </tr>
+            <tr>
+                <td style = "padding:5px 0;">
+                    <span id = 'systemErr' style="display:none; color:#ff0000;">系统错误</span>
+                </td>
+            </tr>
+        </table>
+        <div id="loginError"></div>
+    </div>
+
+</div>
+    <div class="panel myPannel">
+        <div class="panel-heading">
+            <h7 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion"
+                   href="#footer">
+                    <i class="icon-info-sign icon-large "></i>帮助
+                </a>
+            </h7>
+        </div>
+        <div id="footer" class="panel-collapse collapse">
+            <div class="panel-body">
+                <p>  仅供娱乐 欢迎加盟 </p>
+                <p> &copy; Hawksoft Corp.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- system modal start -->
+<div id="ycf-alert" class="modal" style="display:none">
+    <div  class="modal-dialog modal-sm " >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fa fa-exclamation-circle"></i> [Title]</h5>
+            </div>
+            <div class="modal-body small">
+                <p>[Message]</p>
+            </div>
+            <div class="modal-footer" >
+                <button type="button" class="btn btn-primary ok" data-dismiss="modal">[BtnOk]</button>
+                <button type="button" class="btn btn-default cancel" data-dismiss="modal">[BtnCancel]</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="js/lib/jquery-1.8.0.min.js"></script>
+<script src="/js/base.js"></script>
+<script src="js/lib/bootstrap.min.js"></script>
+<script src="js/lib/bootstrap-table.min.js"></script>
+
+<script>
+
+    window.onload = function() {
+        var loading = false;
+        var username = 'hawk';
+//    var roomID = 'room1';
+        var httpHost = location.href.replace(location.hash, '');
+//    $('#parentUser').val('hawkMan');
+
+        window.Modal = myDialog();
+
+        $('#login').on('click', function(){
+            window.location.href='/';
+        });
+
+         $('#register').on('click', function(){
+             var name = $('#loginUser').val().trim();
+             var pwd = $('#channelList').val().trim();
+             var pname = $('#parentUser').val().trim();
+
+             if(name === ''){
+                 $("#inputName").show();
+                 loading = false;
+                 return;
+             }else{
+                 $("#inputName").hide();
+             }
+
+             if(pwd === ''){
+                 $("#inputPass").show();
+                 loading = false;
+                 return;
+             }else
+                $("#inputPass").hide();
+
+             if (pname === '') {
+                 $("#inputIntro").show();
+                 loading = false;
+                 return;
+             }else
+                 $("#inputIntro").hide();
+
+             console.log('pname:'+pname);
+             $.post(httpHost + '/../register', {name: name, password: pwd, pname: pname}, function(data) {
+
+                 if (data.code === code.RETURNCODE.NAMEEXIST) {
+                     $("#nameExist").show();
+                     loading = false;
+                 } else
+                     $("#nameExist").hide();
+
+                 if(data.code === code.RETURNCODE.WRONGINTRODUCER){
+                     $("#correIntro").show();
+                     loading = false;
+                 }else
+                     $("#correIntro").hide();
+
+                 if(data.code === code.RETURNCODE.DBERROR){
+                     $("#systemErr").show();
+                     loading = false;
+                 } else
+                     $("#systemErr").hide();
+
+                 if(data.code === code.RETURNCODE.ROOMIDNULL){
+                     $("#parentRoomID").show();
+                     loading = false;
+                 } else
+                     $("#parentRoomID").hide();
+
+                 if (data.code === code.RETURNCODE.OK) {
+                     window.location.href='/'
+                 }
+             });
+
+         });
+         }
+
+</script>
+</body>
+</html>

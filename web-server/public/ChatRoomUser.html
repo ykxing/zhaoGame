@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>Hawk Game</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/fakeLoader.css">
+    <link rel="stylesheet" href="css/mainCSS.css">
+</head>
+
+
+
+<body>
+
+<div id="fakeLoader"></div>
+
+<div class="container-fluid ">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="active">
+                            <a href="#about" id='roomName'><i class="icon-user icon-white"></i>waiting...</a>
+                        </li>
+                    </ul>
+                <ul class="nav navbar-nav pull-right">
+                    <li class="active">
+                        <a href="#about" id="exitBtn"><i class="icon-signout "></i>返回</a>
+                    </li>
+                </ul>
+              </div>
+            </div>
+      </nav>
+
+    <nav class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
+        <div class="navbar-inner">
+            <div>
+
+                <ul class="nav navbar-nav navbar-left">
+                    <li class="active">
+                        <a href="#about" id="userName"><i class="icon-user icon-white"></i>waiting...</a></li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-left">
+                    <li class="active">
+                        <a href="#about" id="balance"><i class="icon-money icon-white"></i>waiting...</a></li>
+                </ul>
+
+                <ul class="nav navbar-nav pull-right ">
+                    <li class="dropdown ">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i
+                                class="icon-hand-right"></i>
+                            菜单
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+
+                            <li><a id="noSleepEnableMenu"  href="javascript:void(0);" onclick="noSleepEnable()" ><i class="icon-remove "></i>屏幕常亮</a></li>
+                            <li><a id="userDownScoreid"  href="javascript:void(0);" onclick="userDownScore()" ><i class="icon-credit-card "></i>要求兑奖</a></li>
+                            <li><a id="fullScreenid"  href="javascript:void(0);" onclick="fullScreen()" ><i class="icon-credit-card "></i>Full Screen</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <div class='panel panel-default ' id='main'>
+
+    </div>
+
+    <div class="panel-group" id="accordion" style="display: none">
+
+        <div class="panel myPannel panel-primary ">
+            <div class="panel-heading">
+                <h7 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion"
+                       href="#mainpanel">
+                        <i class="icon-desktop icon-large "></i>游戏界面
+                    </a>
+                </h7>
+            </div>
+            <div id="mainpanel" class="panel-collapse collapse in">
+                <div class="panel-body">
+
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class='row-fluid'>
+            <div class="  panel myPannel">
+                <div class="panel-heading">
+                    <h7>
+                        <a data-toggle="collapse" data-parent="#accordion"
+                           href="#users">
+                            <i class="icon-group icon-large "></i>玩家列表
+                        </a>
+                    </h7>
+                </div>
+                <div id="users" class="panel-collapse collapse">
+                    <div class="panel-body">
+
+                        <div class="panel" id="usersList">
+
+                        </div>
+                        <HR style="border: 1px dashed #987cb9" width="100%" color=#987cb9 SIZE=1>
+                        <form class="form-inline" role="form">
+                            <div class="form-group">
+                                <label class="form-label">输入消息</label>
+                                <input type="text" id="message" class="form-control">
+
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class='row-fluid'>
+            <div class="panel myPannel">
+                <div class="panel-heading">
+                    <h7 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion"
+                           href="#messages">
+                            <i class="icon-comments icon-large "></i>消息列表
+                        </a>
+                    </h7>
+                </div>
+                <div id="messages" class="panel-collapse collapse ">
+                    <div class="panel-body">
+                        <div class="panel myPannel" id='messageBoard' style="height:120px; overflow-y:auto"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class='row-fluid' id = 'managePanel'>
+            <div class="panel myPannel">
+                <div class="panel-heading">
+                    <h7 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion"
+                           href="#manage">
+                            <i class="icon-wrench icon-large "></i>游戏管理
+                        </a>
+                    </h7>
+                </div>
+                <div id="manage" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div class="btn-group btn-group-lg">
+                            <button type="button" class="btn  btn-default" id="unLock">提前对单</button>
+                            <button type="button" class="btn btn-default " id=''>解除保单箱</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script src="js/lib/jquery-1.8.0.min.js"></script>
+<script src="js/lib/socket.io.js"></script>
+<script src="js/lib/pomeloclient.js"></script>
+<script src="/js/lib/phaser.min.js"></script>
+<script src="/js/lib/NoSleep.min.js"></script>
+<script src="/js/base.js"></script>
+<script src="/js/qswhU2GB.js"></script>
+<script src="/js/chatRoomUser.js"></script>
+<script src="js/lib/bootstrap.min.js"></script>
+<script src="js/lib/bootstrap-table.min.js"></script>
+<script src="js/lib/fakeLoader.min.js"></script>
+<script src="js/lib/layer/layer.js"></script>
+<script>
+
+    var pomelo = window.pomelo;
+    var httpHost = location.href.replace(location.hash, '');
+    var username = '';
+    var curUserName = '*';
+    var roomID = 1;
+    var token;
+    var msgQueue = [];
+    var state = code.STATE.INIT;
+    var bIfFirstIn = true;
+    var clock = 0;
+    var myTimer = 0;
+    var game;
+    var paddingBmp;
+    var btnBmp;
+    var btnGroup;
+    var btnSystemGroup;
+    var bIfLoadingFinish = false;
+    var text;
+    var loadingText;
+    var tempText;
+    var card1;
+    var cardBack;
+    var desktop;
+    var sceneBmp;
+    var bettingBmp;
+    var bettingGroup;
+    var allBettingGroup;
+    //var allBettingBmp;
+    var bmpText;
+    var clockBmp;
+    var clockSprite;
+    var userInfoBmp;
+    var userGroup;
+    var selectedUser = '';
+    var winColor = 0;
+    var textSwitchUnit;
+    var checkList = {connected: false, loaded: false, sayHello: false};
+    var tapInfo = {ifTap: false, x: 0, y: 0};
+
+
+    var music;
+    var fx;
+    var sfx;
+    var audios = [];
+
+    var noSleepEnabled = false;
+    var noSleep;
+
+    var printerState = false;
+    var printerLastResponseTime = new Date();
+
+    $(document).ready(function () {
+        $("#fakeLoader").fakeLoader({
+            timeToHide:2000,
+            bgColor:"#e74c3c",
+            spinner:"spinner4"
+        });
+
+
+
+        username = storage("userName");
+        token = storage('token');
+        roomID = storage('roomID');
+        if (username == null || token == null)
+            window.location.href = '/';
+
+        $.post(httpHost + '/../getUserInfo', {'username': username, 'token': token}, function (data) {
+            if (data.code != code.RETURNCODE.OK) {
+                console.log(data.message);
+                window.location.href = '/'
+            } else {
+
+                storage('userName', data.userName);
+                username = data.userName;
+                storage('userType', data.userType);
+                userType = data.userType;
+                storage('balance', data.balance);
+                storage('parent', data.parent);
+                storage('roomID', data.roomID);
+                storage('homeRoomID', data.roomID);
+                initRoom();
+                $('#userName').html('<i class="icon-user icon-large"></i>' + userTypeString(data.userType) + ":" + username);
+
+            }
+        });
+
+        noSleep = new NoSleep();
+      //wait message from the server.
+        pomelo.on('onServer', function (data) {
+            if (data.msg != undefined) {
+                msgQueue.push(data.msg);
+            }
+            else {
+                console.log(data);
+            }
+        });
+        //handle disconect message, occours when the client is disconnect with servers
+        pomelo.on('disconnect', function (reason) {
+            //msgQueue.push(reason);
+            if (checkList.connected) {
+                window.location.href = '/';
+                return;
+            }
+
+        });
+
+        //login(username, roomID, token);
+        init();
+
+
+        game = new Phaser.Game(720, 1170, Phaser.AUTO, 'main', {
+            preload: preload,
+            create: create,
+            update: update,
+            render: render
+        });
+
+    });
+
+    function noSleepEnable(){
+        console.log('start btn is pressed');
+        if(!noSleepEnabled) {
+            noSleep.enable();
+            noSleepEnabled = true;
+            $('#noSleepEnableMenu').html('<i class="icon-ok "></i>'+'屏幕常亮');
+        }
+        else{
+            noSleep.disable();
+            noSleepEnabled = false;
+            $('#noSleepEnableMenu').html('<i class="icon-remove "></i>'+'屏幕常亮');
+
+        }
+    }
+
+    function fullScreen(){
+        if (game.scale.isFullScreen) {
+            game.scale.stopFullScreen();
+        }
+        else {
+            game.scale.startFullScreen(false);
+        }
+    }
+
+    function userDownScore(){
+        layer.prompt({title: '请输入兑奖分值并确认'},function(val, index){
+
+            if(parseInt(val)> 0 && storage('userName')!='' && storage('parent') !='' ) {
+                layer.msg('你要兑奖分值为'+val);
+                sendMsgToUser({
+                    command: code.COMMAND.USERREQESTDOWNSCORE,
+                    para: val,
+                    fromUser: storage('userName'),
+                    toUser: storage('parent')
+                }, storage('parent'));
+            }
+            else {
+                layer.msg('请重新输入');
+            }
+            layer.close(index);
+        });
+
+    }
+
+
+    function initRoom(){
+        var userType = storage('userType');
+        console.log('initRoom Start');
+        console.log('userType= '+ userType);
+        switch(userType){
+            case code.USERTYPE.ANCHOR:
+                break;
+            default:
+                $('#managePanel').hide();
+                break;
+        }
+    }
+
+    $("#exitBtn").click(function (e) {
+        pomelo.disconnect();
+        roomID = storage('homeRoomID');
+        storage('roomID', roomID);
+        window.location.href = '/';
+    });
+
+    $("#userTable").on('click-row.bs.table', function (e, row, ele, field) {
+
+        curUserName = row.userName;
+        // alert(curUserName+ 'is selected');
+        console.log('curUserName=' + curUserName);
+    });
+
+
+    $('#unLock').click(function () {
+
+        if (storage('userType') != code.USERTYPE.HOSTER) {
+            alert("您没有权限");
+        }
+        else {
+            console.log('unLock');
+            sendMsg({command: code.COMMAND.UNLOCK, para: ''});
+        }
+
+    });
+
+    function chat(event){
+        console.log('select one');
+        var s = $(this).text();
+        var toUser = s.split('(')[0];
+        if(toUser == '全体')
+            toUser = '*';
+        console.log(toUser);
+        var mes = $(':input#message').val();
+        if (toUser == "" || mes == "") {
+
+        }
+        else {
+            sendMsg({command: code.COMMAND.CHAT, para: {mes: mes, to: toUser}});
+            var blen = $("#messageBoard tr").length;
+            if (blen > 5) {
+                $("#messageBoard tr").eq(0).remove();
+            }
+            if(toUser != "*")
+                addMessage(username, "", mes);
+            $('#message').val("");
+
+        }
+
+
+    }
+
+
+</script>
+<object id="plugin0" type="application/x-juart" width="0" height="0">
+    <param name="onload" value="pluginLoaded"/>
+</object>
+<br/>
+</body>
+
+</html>

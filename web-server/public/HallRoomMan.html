@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport"content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>Hawk Game</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="css/bootstrap-editable.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/fakeLoader.css">
+    <link rel="stylesheet" href="css/mainCSS.css">
+</head>
+<script src="js/lib/jquery-1.8.0.min.js"></script>
+<script src="js/lib/fakeLoader.min.js"></script>
+<body>
+<div id="fakeLoader"></div>
+
+<div class="container-fluid ">
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="navbar-inner">
+            <ul class="nav navbar-nav navbar-left">
+                <li class="active">
+                    <a href="#about" id='roomName'><i class="icon-user icon-white"></i>waiting...</a>
+
+                </li>
+            </ul>
+            <ul class="nav navbar-nav pull-right">
+                <li class="active">
+                    <a href="#about" id="exitBtn"><i class="icon-off "></i>注销</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <nav class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
+        <div class="navbar-inner">
+            <div>
+
+                <ul class="nav navbar-nav navbar-left">
+                    <li class="active">
+                        <a href="#about" id="userName"><i class="icon-user icon-white"></i>waiting...</a></li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-left">
+                    <li class="active">
+                        <a href="#about" id="balance"><i class="icon-money icon-white"></i>0</a></li>
+                </ul>
+
+                <ul class="nav navbar-nav pull-right  ">
+                    <li class="dropdown  ">
+                        <a href="#" class="dropdown-toggle active" data-toggle="dropdown"><i
+                                class="icon-hand-right"></i>
+                            操作菜单
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+
+                            <li><a id="noSleepEnableMenu" href="javascript:void(0);" onclick="noSleepEnable()"><i
+                                    class="icon-remove "></i>屏幕常亮</a></li>
+                            <li class="divider"></li>
+                            <li><a id="noSleepEnableMenu2" href="javascript:void(0);" onclick="Test()"><i
+                                    class="icon-wrench"></i>Setting</a></li>
+
+                        </ul>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <div class="panel-group" id="accordion">
+
+        <div class="panel myPannel " style="display: none">
+            <div class="panel-heading">
+                <h7 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion"
+                       href="#mainpanel">
+                        <i class="icon-desktop icon-large "></i>游戏界面
+                    </a>
+                </h7>
+            </div>
+            <div id="mainpanel" class="panel-collapse collapse ">
+                <div class="panel-body">
+                    <div id='content' class='row-fluid'>
+                        <div class='myPannel panel panel-default' id='main'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class='row-fluid'>
+            <div class="  panel myPannel" style="display: none">
+                <div class="panel-heading">
+                    <h7>
+                        <a data-toggle="collapse" data-parent="#accordion"
+                           href="#users">
+                            <i class="icon-group icon-large "></i>玩家列表
+                        </a>
+                    </h7>
+                </div>
+                <div id="users" class="panel-collapse collapse">
+                    <div class="panel-body">
+
+                        <div class="panel" id="usersList">
+
+                        </div>
+                        <HR style="border: 1px dashed #987cb9" width="100%" color=#987cb9 SIZE=1>
+
+                        <form class="form-inline" role="form">
+                            <div class="form-group">
+                                <label class="form-label">输入消息</label>
+                                <input type="text" id="message" class="form-control">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class='row-fluid'>
+            <div class="panel myPannel" style="display: none">
+                <div class="panel-heading">
+                    <h7 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion"
+                           href="#messages">
+                            <i class="icon-comments icon-large "></i>消息列表
+                        </a>
+                    </h7>
+                </div>
+                <div id="messages" class="panel-collapse collapse ">
+                    <div class="panel-body">
+                        <div class="panel myPannel" id='messageBoard' style="height:120px; overflow-y:auto"></div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="  panel myPannel">
+            <div class="panel-heading">
+                <h7>
+                    <a data-toggle="collapse" data-parent="#accordion"
+                       href="#account">
+                        <i class="icon-group icon-large "></i>账目管理
+                    </a>
+                </h7>
+            </div>
+            <div id="account" class="panel-collapse collapse">
+
+                <div class='panel-body'>
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                用户列表
+                            </h3>
+                        </div>
+                        <div class='panel-body'>
+                            <div class="btn-group pull-left">
+                                <button type="button" class="btn  btn-default" id="getSubUserInfo">刷新用户列表</button>
+
+                            </div>
+                            <table class="table-condensed  table-hover table-bordered" id="subUserTable"
+                                   data-pagination="true" data-page-size="10" data-search="true"
+                                   data-show-refresh="false"
+                                   data-show-toggle="false" data-show-columns="false" data-single-select="true"
+                                   data-card-view="false" data-click-to-select="true" data-striped="true">
+                                <thead>
+                                <tr>
+                                    <th data-field="userName">用户名</th>
+                                    <th data-field="userType">用户类型</th>
+                                    <th data-field="balance">余分</th>
+                                    <th data-field="waitBalance">上分</th>
+                                    <th data-field="state" data-checkbox="true"></th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class='row-fluid'>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                账目明细
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="btn-group pull-left">
+                                <button type="button" class="btn  btn-default" id="getAccount"
+                                        style="margin-left:10px;">
+                                    获得账目明细
+                                </button>
+
+                            </div>
+
+                            <table class="table-condensed" id="accountTable" data-pagination="true"
+                                   data-page-size="5"
+                                   data-search="false"
+                                   data-show-refresh="false"
+                                   data-show-toggle="false" data-show-columns="false" data-show-pagesize='false'
+                                   data-single-select="true"
+                                   data-card-view="false" data-click-to-select="true">
+                                <thead>
+                                <tr>
+                                    <th data-field="userID" >userID</th>
+                                    <th data-field="time">time</th>
+                                    <th data-field="operation">operation</th>
+                                    <th data-field="note">note</th>
+                                    <th data-field="debit">debit</th>
+                                    <th data-field="credit">credit</th>
+                                    <th data-field="target">target</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class='row-fluid'>
+            <div class="panel myPannel">
+                <div class="panel-heading">
+                    <h7 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion"
+                           href="#room">
+                            <i class="icon-comments icon-large "></i>机台管理
+                        </a>
+                    </h7>
+                </div>
+
+                <div id="room" class="panel-collapse collapse ">
+                    <div class="panel-body">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                房间列表
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="btn-group ">
+                                <button type="button" class="btn  btn-default" id="getRooms">刷新房间信息</button>
+                            </div>
+                            <table class="table-condensed  table-hover table-bordered" id="roomTable"
+                                   data-pagination="true" data-page-size="10" data-search=""
+                                   data-show-refresh="false"
+                                   data-show-toggle="false" data-show-columns="false" data-single-select="true"
+                                   data-card-view="true" data-click-to-select="true" data-striped="true">
+                                <thead>
+                                <tr>
+                                    <th data-field="roomID" data-visible="false">机台号</th>
+                                    <th data-field="config" data-visible="false">config</th>
+                                    <th data-field="roomName">机台名</th>
+                                    <th data-field="roomType">游戏类型</th>
+                                    <th data-field="limitScoreOfKing">王限注</th>
+                                    <th data-field="limitScoreOfOthers">其它限注</th>
+                                    <th data-field="maxNumOfUser">人数限制</th>
+                                    <th data-field="switchString">切换</th>
+                                    <th data-field="roomDescrib">游戏规则</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/lib/socket.io.js"></script>
+<script src="js/lib/pomeloclient.js"></script>
+<script src="/js/lib/phaser.min.js"></script>
+<script src="/js/lib/NoSleep.min.js"></script>
+
+<script src="/js/base.js"></script>
+<script src="/js/hallRoomMan.js"></script>
+<script src="js/lib/bootstrap.min.js"></script>
+<script src="js/lib/bootstrap-table.min.js"></script>
+<script src="js/lib/bootstrap-editable.min.js"></script>
+<script src="js/lib/layer/layer.js"></script>
+
+</body>
+</html>
