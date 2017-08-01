@@ -358,7 +358,7 @@ function removeUser(user) {
  'para'
  }
 ********************/
-/*
+
 function sendMsg(msg) {
     var route = "chat.chatHandler.send";
     pomelo.request(route, msg, function (data) {
@@ -367,13 +367,6 @@ function sendMsg(msg) {
 
 
 }
-*/
-function sendMsg(msg) {
-    var route = "chat.chatHandler.send";
-    pomelo.notify(route, msg);
-
-}
-
 /*
  pomelo.notify(route, {
  rid: roomID,
