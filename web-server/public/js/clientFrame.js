@@ -16,12 +16,12 @@ clientFrame.Boot = {
         game.scale.pageAlignVertically = true;
         //game.scale.setScreenSize(true);
         //game.scale.forceLandscape = true;
-        layer.msg('clientFrame Boot');
+        //layer.msg('clientFrame Boot');
     },
     preload: function() {
     },
     create: function() {
-        game.state.start('clientFrame.Preloader');
+        //game.state.start('clientFrame.Preloader');
         console.log('start clientFrame.preloader');
     }
 };

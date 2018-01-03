@@ -23,7 +23,7 @@ function create()
     //game.scale.scaleMode = Phaser.ScaleManager.RESIZE;
 
     //game.stage.backgroundColor = '#00ffff';
-
+    //game.scale.setSceenSize(true);
     game.stage.backgroundColor = '#ffffff';
 
     //	You can listen for each of these events from Phaser.Loader

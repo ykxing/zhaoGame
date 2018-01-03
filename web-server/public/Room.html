@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Phaser-浏览器兼容处理</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+        }
+
+        #game {
+            width: 100%;
+            height: 100%;
+        }
+
+        canvas {
+            margin: 0 auto;
+        }
+    </style>
+
+    <script src="js/lib/jquery-1.8.0.min.js"></script>
+    <script src="js/lib/socket.io.js"></script>
+    <script src="js/lib/pomeloclient.js"></script>
+    <script src="/js/lib/phaser.js"></script>
+    <script src="/js/lib/phase-slider.min.js"></script>
+    <script src="/js/lib/floatingText.min.js"></script>
+    <script src="/js/lib/slick-ui.min.js"></script>
+    <script src="/js/lib/phaser-state-transition.min.js"></script>
+    <script src="/js/lib/dat.gui.js"></script>
+    <script src="/js/base.js"></script>
+    <script src="js/lib/bootstrap.min.js"></script>
+    <script src="js/lib/layer/layer.js"></script>
+</head>
+<body>
+<div id="game"></div>
+<script src="js/Room.js"></script>
+<script src="js/HallRoom.js"></script>
+<script src="js/BootState.js"></script>
+<script src="js/NewState.js"></script>
+<script src="js/SliderState.js"></script>
+<script>
+$(document).ready(function(){
+var hr  = new HallRoom(800,600);
+    pomelo.on('onServer', function (data) {
+        if (data.msg != undefined) {
+            hr.msgQueue.push(data.msg);
+            console.log(data.msg);
+        }
+        else {
+            console.log(data);
+        }
+    });
+
+console.log(hr instanceof Phaser.Game);
+console.log(hr instanceof Room);
+console.log(hr instanceof HallRoom);
+hr.f1();
+hr.dealMessage();
+hr.f1();
+});
+</script>
+
+</body>
+</html>
