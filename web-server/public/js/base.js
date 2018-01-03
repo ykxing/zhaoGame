@@ -367,7 +367,6 @@ function sendMsg(msg) {
 
 
 }
-
 /*
  pomelo.notify(route, {
  rid: roomID,
